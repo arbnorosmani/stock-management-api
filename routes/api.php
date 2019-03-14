@@ -18,10 +18,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group([ 'prefix' => 'auth', 'namespace' => 'API' ], function () {
+
     Route::post('login', 'AuthController@login');
+    Route::get('check', 'AuthController@checkAuth')->middleware('auth:api');
   
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
     });
+
+    Route::post('/profile', 'UsersController@updateProfile');
 });

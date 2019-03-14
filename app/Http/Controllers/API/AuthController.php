@@ -47,7 +47,8 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
-            )->toDateTimeString()
+            )->toDateTimeString(),
+            'user' => $user 
         ]);
     }
   
@@ -72,5 +73,26 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         return response()->json($request->user());
+    }
+
+
+    /**
+     * Get the authenticated User
+     *
+     * @return [boolean] status
+     * @return [object] user
+     */
+    public function checkAuth(Request $request){
+
+        if($request->user() == null){
+            return response()->json(['status' => false]);
+        }
+
+        $user = $request->user();
+
+        return response()->json([
+            'status' => true,
+            'user' => $user,
+        ]);
     }
 }
