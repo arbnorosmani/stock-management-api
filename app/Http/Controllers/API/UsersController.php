@@ -4,9 +4,30 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
+use App\User;
 
 class UsersController extends Controller
 {
+
+
+	/**
+     * Get single user
+     *
+     * @param  [Request] request
+     * 
+     * @return [array] users
+     */
+	public function getUsers(Request $request){
+
+		$total = User::count();
+
+		$users = User::select("id", "email", "name", "photo_url")
+            ->orderBy(Input::get('order', 'id'), Input::get('type', 'DESC'))
+            ->paginate(Input::get('size', '10'));
+
+        return response()->json([ 'users' => $users, 'total' => $total ]);    
+	}
 
 	/**
      * Get single user
@@ -49,6 +70,49 @@ class UsersController extends Controller
 		return response()->json(['success' => true, 'message' => 'profile_updated']);
 	}
 
+	/**
+     * Delete user
+     *
+     * @param  [integer] id
+     * @return [boolean] success
+     * @return [string] message
+     */
+	public function destory($id){
+		try{
+			$user = User::find($id);
 
+			if(!empty($user)){
+				$user->delete();
+
+				return response()->json([ 'success' => true, 'message' => 'user_deleted' ]);
+			}
+
+		}catch(\Exception $e){
+			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+		}
+
+		return response()->json([ 'success' => false, 'message' => 'user_not_deleted' ]);
+	}
+
+	/**
+     * Delete multiple users
+     *
+     * @return [boolean] success
+     * @return [string] message
+     */
+	public function bulkDelete(Request $request){
+		try{
+			
+			$users = User::whereIn('id', $request->ids)->delete();
+
+			return response()->json([ 'success' => true, 'message' => 'users_deleted' ]);
+		
+
+		}catch(\Exception $e){
+			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+		}
+
+		return response()->json([ 'success' => false, 'message' => 'users_not_deleted' ]);
+	}
 
 }

@@ -35,6 +35,9 @@ Route::group([ 'namespace' => 'API' ], function () {
 
 	Route::group([ 'prefix' => 'users', 'middleware' => ['auth:api'] ], function(){
 
+		Route::get('/', 'UsersController@getUsers');
+		Route::delete('/delete/{id}', 'UsersController@destory');
+		Route::post('/delete/bulk', 'UsersController@bulkDelete');
 		Route::get('/{id}', 'UsersController@getUser');
 
 	});
