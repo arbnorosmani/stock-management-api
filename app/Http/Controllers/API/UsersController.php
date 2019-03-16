@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use App\User;
+use Validator;
 
 class UsersController extends Controller
 {
@@ -77,7 +78,7 @@ class UsersController extends Controller
      * @return [boolean] success
      * @return [string] message
      */
-	public function destory($id){
+	public function destroy($id){
 		try{
 			$user = User::find($id);
 
@@ -113,6 +114,72 @@ class UsersController extends Controller
 		}
 
 		return response()->json([ 'success' => false, 'message' => 'users_not_deleted' ]);
+	}
+
+
+	/**
+     * Store user
+     *
+     * @return [boolean] success
+     * @return [string] message
+     */
+	public function store(Request $request){
+		try{
+			$validator =  Validator::make($request->all(), [
+	            'name' => 'required',
+	            'email' => 'required|unique:users',
+	            'password' => 'required|confirmed'
+	        ]);
+
+			if ($validator->fails()) {
+	            return response()->json(['success' => false, 'errors' => $validator->errors() ]);
+	        }
+
+			$input = $request->all();
+
+			$user = new User;
+			$user->fill($input);
+			$user->save();
+
+			return response()->json([ 'success' => true, 'message' => 'users_stored' ]);
+		}catch(\Exception $e){
+			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+		}
+
+		return response()->json([ 'success' => false, 'message' => 'users_not_stored' ]);
+	}
+
+	/**
+     * Update user
+     *
+     * @return [boolean] success
+     * @return [string] message
+     */
+	public function update(Request $request){
+		try{
+			$validator =  Validator::make($request->all(), [
+	            'name' => 'required',
+	            'email' => 'required|unique:users,email,'.$request->id,
+	            //'password' => 'required|confirmed'
+	        ]);
+
+			// Check if request data is valid
+			if ($validator->fails()) {
+	            return response()->json(['success' => false, 'errors' => $validator->errors() ]);
+	        }
+
+			$input = $request->all();
+
+			$user = User::find($request->id);
+			$user->fill($input);
+			$user->save();
+
+			return response()->json([ 'success' => true, 'message' => 'users_updated' ]);
+		}catch(\Exception $e){
+			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+		}
+
+		return response()->json([ 'success' => false, 'message' => 'users_not_updated' ]);
 	}
 
 }
