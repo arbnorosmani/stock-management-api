@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Setting;
 
 class AuthController extends Controller
 {
@@ -77,7 +78,7 @@ class AuthController extends Controller
 
 
     /**
-     * Get the authenticated User
+     * Get the authenticated User and settings
      *
      * @return [boolean] status
      * @return [object] user
@@ -89,10 +90,12 @@ class AuthController extends Controller
         }
 
         $user = $request->user();
+        $settings = Setting::getSettings();
 
         return response()->json([
             'status' => true,
             'user' => $user,
+            'settings' => $settings
         ]);
     }
 }

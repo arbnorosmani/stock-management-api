@@ -8,7 +8,6 @@ use App\Setting;
 
 class SettingsController extends Controller
 {
-    
 
 	/**
      * Get all settings
@@ -17,15 +16,9 @@ class SettingsController extends Controller
      */
     public function getSettings(){
 
-    	$settings = Setting::all();
+    	$settings = Setting::getSettings();
 
-    	$data = [];
-        foreach($settings as $setting){
-            $data[$setting->key] = $setting->value;
-        }
-
-        return response()->json(['settings' => $data]);
-
+        return response()->json(['settings' => $settings]);
     }
 
 
@@ -49,6 +42,5 @@ class SettingsController extends Controller
         }
 
         return response()->json(['success' => false, 'message' => 'settings_not_updated']);
-
     }
 }

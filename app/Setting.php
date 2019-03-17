@@ -31,6 +31,22 @@ class Setting extends Model
 
 
     /**
+     * Get all settings formatted.
+     *
+     * @return array
+     */
+    public static function getSettings(){
+        $settings = Setting::all();
+        $data = [];
+        foreach($settings as $setting){
+            $data[$setting->key] = $setting->value;
+        }
+
+        return $data;
+    }
+
+
+    /**
      * Add or update an item in settings.
      *
      * @param  $key

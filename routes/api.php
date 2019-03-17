@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group([ 'namespace' => 'API' ], function () {
 
+	// Auth routes
 	Route::group([ 'prefix' => 'auth'], function () {
 
 		Route::post('login', 'AuthController@login');
@@ -33,6 +34,7 @@ Route::group([ 'namespace' => 'API' ], function () {
 
 	Route::post('profile', 'UsersController@updateProfile')->middleware('auth:api');
 
+	// User routes
 	Route::group([ 'prefix' => 'users', 'middleware' => ['auth:api'] ], function(){
 
 		Route::get('/', 'UsersController@getUsers');
@@ -41,17 +43,16 @@ Route::group([ 'namespace' => 'API' ], function () {
 		Route::post('/store', 'UsersController@store');
 		Route::post('/update', 'UsersController@update');
 		Route::get('/{id}', 'UsersController@getUser');
-		
+
 	});
 
+	// Settings routes
 	Route::group([ 'prefix' => 'settings', 'middleware' => ['auth:api'] ], function(){
 
 		Route::get('/', 'SettingsController@getSettings');
 		Route::post('/update', 'SettingsController@updateSettings');
 
 	});
-
-
     
 });
 
