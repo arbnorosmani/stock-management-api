@@ -41,7 +41,17 @@ Route::group([ 'namespace' => 'API' ], function () {
 		Route::post('/store', 'UsersController@store');
 		Route::post('/update', 'UsersController@update');
 		Route::get('/{id}', 'UsersController@getUser');
+		
 	});
+
+	Route::group([ 'prefix' => 'settings', 'middleware' => ['auth:api'] ], function(){
+
+		Route::get('/', 'SettingsController@getSettings');
+		Route::post('/update', 'SettingsController@updateSettings');
+
+	});
+
+
     
 });
 

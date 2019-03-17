@@ -13,7 +13,7 @@ class UsersController extends Controller
 
 
 	/**
-     * Get single user
+     * Get all users
      *
      * @param  [Request] request
      * 
