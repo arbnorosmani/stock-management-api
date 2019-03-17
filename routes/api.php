@@ -53,6 +53,20 @@ Route::group([ 'namespace' => 'API' ], function () {
 		Route::post('/update', 'SettingsController@updateSettings');
 
 	});
+
+	// Category routes
+	Route::group([ 'prefix' => 'categories', 'middleware' => ['auth:api'] ], function(){
+
+		Route::get('/', 'CategoriesController@getCategories');
+		Route::delete('/delete/{id}', 'CategoriesController@destroy');
+		Route::post('/delete/bulk', 'CategoriesController@bulkDelete');
+		Route::post('/store', 'CategoriesController@store');
+		Route::post('/update', 'CategoriesController@update');
+		Route::get('/{id}', 'CategoriesController@getCategory');
+
+		Route::post('/generate/slug', 'CategoriesController@generateSlug');
+
+	});
     
 });
 
