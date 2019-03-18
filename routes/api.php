@@ -67,6 +67,20 @@ Route::group([ 'namespace' => 'API' ], function () {
 		Route::post('/generate/slug', 'CategoriesController@generateSlug');
 
 	});
+
+	// Brand routes
+	Route::group([ 'prefix' => 'brands', 'middleware' => ['auth:api'] ], function(){
+
+		Route::get('/', 'BrandsController@getBrands');
+		Route::delete('/delete/{id}', 'BrandsController@destroy');
+		Route::post('/delete/bulk', 'BrandsController@bulkDelete');
+		Route::post('/store', 'BrandsController@store');
+		Route::post('/update', 'BrandsController@update');
+		Route::get('/{id}', 'BrandsController@getBrand');
+
+		Route::post('/generate/slug', 'BrandsController@generateSlug');
+
+	});
     
 });
 
