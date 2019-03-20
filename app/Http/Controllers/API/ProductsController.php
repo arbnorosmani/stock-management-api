@@ -21,7 +21,7 @@ class ProductsController extends Controller
 
 		$total = Product::count();
 
-		$products = Product::with(['brand'])
+		$products = Product::with(['brand', 'categories'])
 			->orderBy(Input::get('order', 'id'), Input::get('type', 'DESC'))
             ->paginate(Input::get('size', '10'));
 

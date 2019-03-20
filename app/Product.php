@@ -44,9 +44,9 @@ class Product extends Model
     }
 
     /**
-     * Get the category record associated with the product.
+     * Get the categories associated with the product.
      */
-    public function category(){
-    	return $this->belongsTo('App\Category', 'category_id');
+    public function categories(){
+    	return $this->belongsToMany('App\Category', 'product_categories', 'product_id');
     }
 }

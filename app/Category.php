@@ -33,7 +33,7 @@ class Category extends Model
      * Get the products associated with the category.
      */
     public function products(){
-    	return $this->hasMany('App\Product', 'category_id');
+    	return $this->belongsToMany('App\Product', 'product_categories', 'category_id');
     }
 
     /**
