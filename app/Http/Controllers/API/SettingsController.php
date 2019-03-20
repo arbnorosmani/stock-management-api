@@ -36,11 +36,21 @@ class SettingsController extends Controller
                 $setData = Setting::setSetting($key, $value);
             }
 
-            return response()->json(['success' => true, 'message' => 'settings_updated']);
+            return response()->json([
+                'success' => true, 
+                'message' => 'settings_updated'
+            ]);
+            
         }catch( \Exception $e){
-            return response()->json(['success' => false, 'message' => 'settings_not_updated']);
+            return response()->json([
+                'success' => false, 
+                'message' => 'settings_not_updated'
+            ]);
         }
 
-        return response()->json(['success' => false, 'message' => 'settings_not_updated']);
+        return response()->json([
+            'success' => false, 
+            'message' => 'settings_not_updated'
+        ]);
     }
 }

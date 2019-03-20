@@ -19,9 +19,10 @@ class CreateProductsTable extends Migration
             $table->integer('brand_id')->unsigned();
             $table->string('code', 10);
             $table->string('name');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->decimal('price', 5, 2);
             $table->integer('quantity');
+            $table->string('slug');
             $table->timestamps();
 
             $table->foreign('created_by')->references('id')->on('users');

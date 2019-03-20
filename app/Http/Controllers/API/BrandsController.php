@@ -17,7 +17,8 @@ class BrandsController extends Controller
      *
      * @param  [Request] request
      * 
-     * @return [array]  brands
+     * @return [array] brands
+     * @return [integer] total
      */
 	public function getBrands(Request $request){
 
@@ -26,7 +27,11 @@ class BrandsController extends Controller
 		$brands = Brand::orderBy(Input::get('order', 'id'), Input::get('type', 'DESC'))
             ->paginate(Input::get('size', '10'));
 
-        return response()->json([ 'brands' => $brands, 'total' => $total ]);    
+        return response()->json([ 
+        	'brands' => $brands, 
+        	'total' => $total 
+        ]);    
+
 	}
 
 	/**
@@ -42,7 +47,10 @@ class BrandsController extends Controller
 			$brand = Brand::find($id);
 
 			if(!empty($brand))
-				return response()->json(['success' => true, 'brand' => $brand]);
+				return response()->json([
+					'success' => true, 
+					'brand' => $brand
+				]);
 			
 
 		}catch(\Exception $e){
@@ -66,14 +74,24 @@ class BrandsController extends Controller
 			if(!empty($brand)){
 				$brand->delete();
 
-				return response()->json([ 'success' => true, 'message' => 'brand_deleted' ]);
+				return response()->json([ 
+					'success' => true, 
+					'message' => 'brand_deleted' 
+				]);
 			}
 
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'brand_not_deleted' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'brand_not_deleted' 
+		]);
+
 	}
 
 	/**
@@ -87,14 +105,24 @@ class BrandsController extends Controller
 			
 			$brands = Brand::whereIn('id', $request->ids)->delete();
 
-			return response()->json([ 'success' => true, 'message' => 'brands_deleted' ]);
+			return response()->json([ 
+				'success' => true, 
+				'message' => 'brands_deleted' 
+			]);
 		
 
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'brands_not_deleted' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'brands_not_deleted' 
+		]);
+
 	}
 
 
@@ -113,7 +141,10 @@ class BrandsController extends Controller
 	        ]);
 
 			if ($validator->fails()) {
-	            return response()->json(['success' => false, 'errors' => $validator->errors() ]);
+	            return response()->json([
+	            	'success' => false, 
+	            	'errors' => $validator->errors() 
+	            ]);
 	        }
 
 			$input = $request->all();
@@ -122,12 +153,22 @@ class BrandsController extends Controller
 			$brand->fill($input);
 			$brand->save();
 
-			return response()->json([ 'success' => true, 'message' => 'brand_stored' ]);
+			return response()->json([ 
+				'success' => true, 
+				'message' => 'brand_stored' 
+			]);
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'brand_not_stored' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'brand_not_stored' 
+		]);
+
 	}
 
 	/**
@@ -146,7 +187,10 @@ class BrandsController extends Controller
 
 			// Check if request data is valid
 			if ($validator->fails()) {
-	            return response()->json(['success' => false, 'errors' => $validator->errors() ]);
+	            return response()->json([
+	            	'success' => false, 
+	            	'errors' => $validator->errors() 
+	            ]);
 	        }
 
 			$input = $request->all();
@@ -155,12 +199,22 @@ class BrandsController extends Controller
 			$brand->fill($input);
 			$brand->save();
 
-			return response()->json([ 'success' => true, 'message' => 'brand_updated' ]);
+			return response()->json([ 
+				'success' => true, 
+				'message' => 'brand_updated' 
+			]);
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'brand_not_updated' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'brand_not_updated' 
+		]);
+
 	}
 
 	/**
@@ -171,7 +225,10 @@ class BrandsController extends Controller
      */
 	public function generateSlug(Request $request){
 		if(! $request->has('name') ){
-			return response()->json([ 'success' => false, 'slug' => '' ]);
+			return response()->json([ 
+				'success' => false, 
+				'slug' => '' 
+			]);
 		}
 
 		$id = 0;
@@ -180,6 +237,30 @@ class BrandsController extends Controller
 		}
 		$slug = Brand::createSlug($request->name, $id);
 
-		return response()->json([ 'success' => true, 'slug' => $slug ]);
+		return response()->json([ 
+			'success' => true, 
+			'slug' => $slug 
+		]);
+
+	}
+
+
+	/**
+     * Search brands by value
+     *
+     * @param  [Request] request
+     * 
+     * @return [array]  brands
+     */
+	public function search(Request $request, $value){
+
+		$brands = Brand::where('name', 'LIKE', '%'.$value.'%')
+			->orderBy('name', 'asc')
+			->get();
+
+        return response()->json([ 
+        	'brands' => $brands, 
+        ]);    
+
 	}
 }

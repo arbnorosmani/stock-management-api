@@ -13,10 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::group([ 'namespace' => 'API' ], function () {
 
 	// Auth routes
@@ -65,6 +61,7 @@ Route::group([ 'namespace' => 'API' ], function () {
 		Route::get('/{id}', 'CategoriesController@getCategory');
 
 		Route::post('/generate/slug', 'CategoriesController@generateSlug');
+		Route::get('/search/{value}', 'CategoriesController@search');
 
 	});
 
@@ -79,6 +76,7 @@ Route::group([ 'namespace' => 'API' ], function () {
 		Route::get('/{id}', 'BrandsController@getBrand');
 
 		Route::post('/generate/slug', 'BrandsController@generateSlug');
+		Route::get('/search/{value}', 'BrandsController@search');
 
 	});
 
@@ -89,6 +87,11 @@ Route::group([ 'namespace' => 'API' ], function () {
 		Route::get('/', 'ProductsController@getProducts');
 		Route::delete('/delete/{id}', 'ProductsController@destroy');
 		Route::post('/delete/bulk', 'ProductsController@bulkDelete');
+		Route::post('/store', 'ProductsController@store');
+		Route::post('/update', 'ProductsController@update');
+		Route::get('/{id}', 'ProductsController@getProduct');
+
+		Route::post('/generate/slug', 'ProductsController@generateSlug');
 
 	});
     

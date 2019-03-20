@@ -27,7 +27,11 @@ class UsersController extends Controller
             ->orderBy(Input::get('order', 'id'), Input::get('type', 'DESC'))
             ->paginate(Input::get('size', '10'));
 
-        return response()->json([ 'users' => $users, 'total' => $total ]);    
+        return response()->json([ 
+        	'users' => $users, 
+        	'total' => $total 
+        ]);
+
 	}
 
 	/**
@@ -43,7 +47,10 @@ class UsersController extends Controller
 			$user = User::find($id);
 
 			if(!empty($user))
-				return response()->json(['success' => true, 'user' => $user]);
+				return response()->json([
+					'success' => true, 
+					'user' => $user
+				]);
 			
 
 		}catch(\Exception $e){
@@ -68,7 +75,11 @@ class UsersController extends Controller
 		$user->fill($input);
 		$user->save();
 
-		return response()->json(['success' => true, 'message' => 'profile_updated']);
+		return response()->json([
+			'success' => true, 
+			'message' => 'profile_updated'
+		]);
+
 	}
 
 	/**
@@ -85,14 +96,24 @@ class UsersController extends Controller
 			if(!empty($user)){
 				$user->delete();
 
-				return response()->json([ 'success' => true, 'message' => 'user_deleted' ]);
+				return response()->json([ 
+					'success' => true, 
+					'message' => 'user_deleted' 
+				]);
 			}
 
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'user_not_deleted' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'user_not_deleted' 
+		]);
+
 	}
 
 	/**
@@ -106,14 +127,23 @@ class UsersController extends Controller
 			
 			$users = User::whereIn('id', $request->ids)->delete();
 
-			return response()->json([ 'success' => true, 'message' => 'users_deleted' ]);
+			return response()->json([ 
+				'success' => true, 
+				'message' => 'users_deleted' 
+			]);
 		
 
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'users_not_deleted' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'users_not_deleted' 
+		]);
 	}
 
 
@@ -132,7 +162,10 @@ class UsersController extends Controller
 	        ]);
 
 			if ($validator->fails()) {
-	            return response()->json(['success' => false, 'errors' => $validator->errors() ]);
+	            return response()->json([
+	            	'success' => false, 
+	            	'errors' => $validator->errors() 
+	            ]);
 	        }
 
 			$input = $request->all();
@@ -141,12 +174,22 @@ class UsersController extends Controller
 			$user->fill($input);
 			$user->save();
 
-			return response()->json([ 'success' => true, 'message' => 'users_stored' ]);
+			return response()->json([ 
+				'success' => true, 
+				'message' => 'users_stored' 
+			]);
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'users_not_stored' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'users_not_stored' 
+		]);
+
 	}
 
 	/**
@@ -160,12 +203,14 @@ class UsersController extends Controller
 			$validator =  Validator::make($request->all(), [
 	            'name' => 'required',
 	            'email' => 'required|unique:users,email,'.$request->id,
-	            //'password' => 'required|confirmed'
 	        ]);
 
 			// Check if request data is valid
 			if ($validator->fails()) {
-	            return response()->json(['success' => false, 'errors' => $validator->errors() ]);
+	            return response()->json([
+	            	'success' => false, 
+	            	'errors' => $validator->errors() 
+	            ]);
 	        }
 
 			$input = $request->all();
@@ -174,12 +219,22 @@ class UsersController extends Controller
 			$user->fill($input);
 			$user->save();
 
-			return response()->json([ 'success' => true, 'message' => 'users_updated' ]);
+			return response()->json([ 
+				'success' => true, 
+				'message' => 'users_updated' 
+			]);
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'users_not_updated' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'users_not_updated' 
+		]);
+
 	}
 
 }

@@ -26,7 +26,10 @@ class CategoriesController extends Controller
 		$categories = Category::orderBy(Input::get('order', 'id'), Input::get('type', 'DESC'))
             ->paginate(Input::get('size', '10'));
 
-        return response()->json([ 'categories' => $categories, 'total' => $total ]);    
+        return response()->json([ 
+        	'categories' => $categories, 
+        	'total' => $total 
+        ]);    
 	}
 
 	/**
@@ -41,9 +44,12 @@ class CategoriesController extends Controller
 
 			$category = Category::find($id);
 
-			if(!empty($category))
-				return response()->json(['success' => true, 'category' => $category]);
-			
+			if(!empty($category)){
+				return response()->json([
+					'success' => true, 
+					'category' => $category
+				]);
+			}	
 
 		}catch(\Exception $e){
 			return response()->json(['success' => false]);
@@ -66,14 +72,23 @@ class CategoriesController extends Controller
 			if(!empty($category)){
 				$category->delete();
 
-				return response()->json([ 'success' => true, 'message' => 'category_deleted' ]);
+				return response()->json([ 
+					'success' => true, 
+					'message' => 'category_deleted' 
+				]);
 			}
 
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'category_not_deleted' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'category_not_deleted' 
+		]);
 	}
 
 	/**
@@ -87,14 +102,23 @@ class CategoriesController extends Controller
 			
 			$categories = Category::whereIn('id', $request->ids)->delete();
 
-			return response()->json([ 'success' => true, 'message' => 'categories_deleted' ]);
+			return response()->json([ 
+				'success' => true, 
+				'message' => 'categories_deleted' 
+			]);
 		
 
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'categories_not_deleted' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'categories_not_deleted' 
+		]);
 	}
 
 
@@ -113,7 +137,10 @@ class CategoriesController extends Controller
 	        ]);
 
 			if ($validator->fails()) {
-	            return response()->json(['success' => false, 'errors' => $validator->errors() ]);
+	            return response()->json([
+	            	'success' => false, 
+	            	'errors' => $validator->errors() 
+	            ]);
 	        }
 
 			$input = $request->all();
@@ -122,12 +149,22 @@ class CategoriesController extends Controller
 			$category->fill($input);
 			$category->save();
 
-			return response()->json([ 'success' => true, 'message' => 'category_stored' ]);
+			return response()->json([ 
+				'success' => true, 
+				'message' => 'category_stored' 
+			]);
+
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'category_not_stored' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'category_not_stored' 
+		]);
 	}
 
 	/**
@@ -146,7 +183,10 @@ class CategoriesController extends Controller
 
 			// Check if request data is valid
 			if ($validator->fails()) {
-	            return response()->json(['success' => false, 'errors' => $validator->errors() ]);
+	            return response()->json([
+	            	'success' => false, 
+	            	'errors' => $validator->errors() 
+	            ]);
 	        }
 
 			$input = $request->all();
@@ -155,12 +195,22 @@ class CategoriesController extends Controller
 			$category->fill($input);
 			$category->save();
 
-			return response()->json([ 'success' => true, 'message' => 'category_updated' ]);
+			return response()->json([ 
+				'success' => true, 
+				'message' => 'category_updated' 
+			]);
+
 		}catch(\Exception $e){
-			return response()->json([ 'success' => false, 'message' => $e->getMessage() ]);
+			return response()->json([ 
+				'success' => false, 
+				'message' => $e->getMessage() 
+			]);
 		}
 
-		return response()->json([ 'success' => false, 'message' => 'category_not_updated' ]);
+		return response()->json([ 
+			'success' => false, 
+			'message' => 'category_not_updated' 
+		]);
 	}
 
 	/**
@@ -171,7 +221,10 @@ class CategoriesController extends Controller
      */
 	public function generateSlug(Request $request){
 		if(! $request->has('name') ){
-			return response()->json([ 'success' => false, 'slug' => '' ]);
+			return response()->json([ 
+				'success' => false, 
+				'slug' => '' 
+			]);
 		}
 
 		$id = 0;
@@ -180,7 +233,29 @@ class CategoriesController extends Controller
 		}
 		$slug = Category::createSlug($request->name, $id);
 
-		return response()->json([ 'success' => true, 'slug' => $slug ]);
+		return response()->json([ 
+			'success' => true, 
+			'slug' => $slug 
+		]);
+	}
+
+	/**
+     * Search catgories by value
+     *
+     * @param  [Request] request
+     * 
+     * @return [array]  categories
+     */
+	public function search(Request $request, $value){
+
+		$categories = Category::where('name', 'LIKE', '%'.$value.'%')
+			->orderBy('name', 'asc')
+			->get();
+
+        return response()->json([ 
+        	'categories' => $categories, 
+        ]);    
+
 	}
 
 }
