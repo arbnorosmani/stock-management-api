@@ -17,7 +17,6 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->integer('created_by')->unsigned();
             $table->integer('brand_id')->unsigned();
-            $table->integer('category_id')->unsigned();
             $table->string('code', 10);
             $table->string('name');
             $table->string('image');
@@ -27,7 +26,6 @@ class CreateProductsTable extends Migration
 
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('brand_id')->references('id')->on('brands');
-            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 

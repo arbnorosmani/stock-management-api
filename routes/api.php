@@ -81,6 +81,16 @@ Route::group([ 'namespace' => 'API' ], function () {
 		Route::post('/generate/slug', 'BrandsController@generateSlug');
 
 	});
+
+
+	// Product routes
+	Route::group([ 'prefix' => 'products', 'middleware' => ['auth:api'] ], function(){
+
+		Route::get('/', 'ProductsController@getProducts');
+		Route::delete('/delete/{id}', 'ProductsController@destroy');
+		Route::post('/delete/bulk', 'ProductsController@bulkDelete');
+
+	});
     
 });
 

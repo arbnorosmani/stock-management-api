@@ -99,7 +99,7 @@ class CategoriesController extends Controller
 
 
 	/**
-     * Store caetgory
+     * Store category
      *
      * @return [boolean] success
      * @return [string] message
